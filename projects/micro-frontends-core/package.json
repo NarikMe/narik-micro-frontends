@@ -1,0 +1,12 @@
+{
+  "name": "@narik/micro-frontends-core",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^12.2.0",
+    "@angular/core": "^12.2.0",
+    "@narik/micro-frontends-infrastructure": "^0.0.1"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}
