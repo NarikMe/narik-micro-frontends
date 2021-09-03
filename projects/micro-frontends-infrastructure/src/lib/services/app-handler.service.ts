@@ -18,6 +18,6 @@ export abstract class AppHandler {
     parameters: { [key: string]: any },
     injector: Injector
   ): Promise<App> {
-    return Promise.resolve(app);
+    return Promise.resolve(loadedApp);
   }
 }
