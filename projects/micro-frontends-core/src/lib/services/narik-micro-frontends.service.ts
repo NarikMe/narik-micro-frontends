@@ -4,7 +4,7 @@ import {
   App,
   AppDiscoverer,
   AppInformation,
-  AppInitializer,
+  AppHandler,
   AppLoader,
   AppMetadata,
   AppMetadataLoader,
@@ -31,7 +31,7 @@ export class NarikMicroFrontendsService extends MicroFrontendsService {
     private appDiscoverer: AppDiscoverer,
     private appMetadataLoader: AppMetadataLoader,
     private appLoader: AppLoader,
-    @Inject(AppInitializer) private appInitializers: AppInitializer[]
+    @Inject(AppHandler) private appHandlers: AppHandler[]
   ) {
     super();
   }
@@ -50,7 +50,7 @@ export class NarikMicroFrontendsService extends MicroFrontendsService {
       throw new Error('there is no default in apps');
     }
     await this.appLoader.load(defaultApp).then((loadedApp: any) => {
-      return this.initApp(defaultApp, loadedApp, {
+      return this.activateApp(defaultApp, loadedApp, {
         rootElement,
       });
     });
@@ -65,14 +65,11 @@ export class NarikMicroFrontendsService extends MicroFrontendsService {
             this.apps.valuesArray().map((app) => {
               if (app.eagerLoad) {
                 return this.appLoader.load(app).then((loadedApp) => {
-                  return app.eagerInitialize
-                    ? (this.initApp(app, loadedApp) as Promise<unknown>)
-                    : Promise.resolve();
+                  return this.initApp(app, loadedApp) as Promise<unknown>;
                 });
-              } else if (app.eagerInitialize) {
+              } else {
                 return this.initApp(app) as Promise<unknown>;
               }
-              return Promise.resolve();
             })
           );
         }
@@ -91,20 +88,22 @@ export class NarikMicroFrontendsService extends MicroFrontendsService {
     loadedApp?: any,
     parameters?: { [key: string]: any }
   ): Promise<App> {
-    const initializer = this.appInitializers.find(
-      (x) => x.key === app.initialize.type
-    );
-    if (!initializer) {
-      throw new Error(
-        `could not found any initializer for ${app.initialize.type}`
-      );
+    const handler = this.appHandlers.find((x) => x.key === app.handle.type);
+    if (!handler) {
+      throw new Error(`could not found any handler for ${app.handle.type}`);
     }
-    return initializer.initialize(
-      app,
-      loadedApp,
-      parameters || {},
-      this.injector
-    );
+    return handler.initialize(app, loadedApp, parameters || {}, this.injector);
+  }
+  protected activateApp(
+    app: AppInformation,
+    loadedApp?: any,
+    parameters?: { [key: string]: any }
+  ): Promise<App> {
+    const handler = this.appHandlers.find((x) => x.key === app.handle.type);
+    if (!handler) {
+      throw new Error(`could not found any handler for ${app.handle.type}`);
+    }
+    return handler.activate(app, loadedApp, parameters || {}, this.injector);
   }
 
   protected async populateApps(apps: AppInformation[]): Promise<void> {
@@ -144,7 +143,7 @@ export class NarikMicroFrontendsService extends MicroFrontendsService {
       throw new Error(`could not find any app with key:${appKey}`);
     }
     return this.appLoader.load(app).then((loadedApp: any) => {
-      return this.initApp(app, loadedApp);
+      return this.activateApp(app, loadedApp);
     });
   }
 

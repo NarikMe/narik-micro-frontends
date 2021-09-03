@@ -2,18 +2,18 @@ import { Compiler, Injector, ApplicationRef, Injectable } from '@angular/core';
 import {
   App,
   AppInformation,
-  AppInitializer,
+  AppHandler,
 } from '@narik/micro-frontends-infrastructure';
 
 @Injectable()
-export class AngularAppInitializer extends AppInitializer {
+export class AngularAppInitializer extends AppHandler {
   constructor(private compiler: Compiler, private injector: Injector) {
     super();
   }
   get key(): string {
     return 'angular-app';
   }
-  initialize(
+  activate(
     app: AppInformation<
       any,
       {
@@ -28,11 +28,11 @@ export class AngularAppInitializer extends AppInitializer {
   ): Promise<App> {
     const applicationRef: ApplicationRef = injector.get(ApplicationRef);
     return this.compiler
-      .compileModuleAsync(loadedApp[app.initialize.module])
+      .compileModuleAsync(loadedApp[app.handle.module])
       .then((moduleFactory) => {
         const moduleRef = moduleFactory.create(injector);
         applicationRef.bootstrap(
-          loadedApp[app.initialize.bootstrapComponent],
+          loadedApp[app.handle.bootstrapComponent],
           parameters.rootElement
         );
         return {};
