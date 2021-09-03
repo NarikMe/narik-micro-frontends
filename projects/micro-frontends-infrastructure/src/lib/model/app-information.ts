@@ -4,7 +4,7 @@ export interface AppInformation<
   TLoad = {
     [key: string]: any;
   },
-  TInitialize = {
+  THandle = {
     type: string;
     [key: string]: any;
   },
@@ -20,10 +20,9 @@ export interface AppInformation<
 > {
   readonly key: string;
   readonly eagerLoad: boolean;
-  readonly eagerInitialize: boolean;
   readonly active: boolean;
   readonly isDefault: boolean;
   readonly load: TLoad;
-  readonly initialize: TInitialize;
+  readonly handle: THandle;
   readonly metadata: TMetadata;
 }

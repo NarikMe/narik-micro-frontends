@@ -1,4 +1,4 @@
-import { CustomElementInitializer } from './services/initializers/custom-element-initializer.service';
+import { CustomElementInitializer } from './services/handlers/custom-element-handler.service';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import {
   AppDiscoverer,
@@ -11,11 +11,11 @@ import { JsonMetadataLoader } from './services/json-metadata-loader.service';
 import { JsonAppDiscoverer } from './services/json-app-discoverer.service';
 import { NarikMicroFrontendsService } from './services/narik-micro-frontends.service';
 import { NarikAppLoader } from './services/narik-app-loader.service';
-import { AppInitializer } from '@narik/micro-frontends-infrastructure';
-import { AngularAppInitializer } from './services/initializers/angular-app-initializer.service';
-import { AngularComponentInitializer } from './services/initializers/angular-component-initializer.service';
-import { AngularRoutingAppInitializer } from './services/initializers/angular-routing-app-initializer.service';
-import { AngularServiceInitializer } from './services/initializers/angular-service-initializer.service';
+import { AppHandler } from '@narik/micro-frontends-infrastructure';
+import { AngularAppInitializer } from './services/handlers/angular-app-handler.service';
+import { AngularComponentInitializer } from './services/handlers/angular-component-handler.service';
+import { AngularRoutingAppInitializer } from './services/handlers/angular-routing-app-handler.service';
+import { AngularServiceInitializer } from './services/handlers/angular-service-handler.service';
 
 @NgModule({})
 export class MicroFrontendsCoreModule {
@@ -43,27 +43,27 @@ export class MicroFrontendsCoreModule {
           useClass: options?.appLoader || NarikAppLoader,
         },
         {
-          provide: AppInitializer,
+          provide: AppHandler,
           useClass: AngularComponentInitializer,
           multi: true,
         },
         {
-          provide: AppInitializer,
+          provide: AppHandler,
           useClass: AngularAppInitializer,
           multi: true,
         },
         {
-          provide: AppInitializer,
+          provide: AppHandler,
           useClass: AngularRoutingAppInitializer,
           multi: true,
         },
         {
-          provide: AppInitializer,
+          provide: AppHandler,
           useClass: AngularServiceInitializer,
           multi: true,
         },
         {
-          provide: AppInitializer,
+          provide: AppHandler,
           useClass: CustomElementInitializer,
           multi: true,
         },

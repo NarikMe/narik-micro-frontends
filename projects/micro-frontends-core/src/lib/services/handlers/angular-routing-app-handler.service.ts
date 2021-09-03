@@ -3,13 +3,13 @@ import { Router } from '@angular/router';
 import {
   App,
   AppInformation,
-  AppInitializer,
+  AppHandler,
   AppLoader,
   AppMetadata,
 } from '@narik/micro-frontends-infrastructure';
 
 @Injectable()
-export class AngularRoutingAppInitializer extends AppInitializer {
+export class AngularRoutingAppInitializer extends AppHandler {
   constructor(private router: Router, private appLoader: AppLoader) {
     super();
   }
@@ -27,9 +27,9 @@ export class AngularRoutingAppInitializer extends AppInitializer {
     injector: Injector
   ): Promise<App> {
     this.router.config.push({
-      path: app.initialize.path ?? app.key,
+      path: app.handle.path ?? app.key,
       loadChildren: () => {
-        return this.appLoader.load(app).then((m) => m[app.initialize.module]);
+        return this.appLoader.load(app).then((m) => m[app.handle.module]);
       },
     });
     return Promise.resolve({});

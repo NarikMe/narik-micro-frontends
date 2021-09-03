@@ -2,12 +2,12 @@ import { Injectable, Injector } from '@angular/core';
 import {
   App,
   AppInformation,
-  AppInitializer,
+  AppHandler,
   MicroFrontendsService,
 } from '@narik/micro-frontends-infrastructure';
 
 @Injectable()
-export class AngularServiceInitializer extends AppInitializer {
+export class AngularServiceInitializer extends AppHandler {
   constructor(private injector: Injector) {
     super();
   }
@@ -21,7 +21,7 @@ export class AngularServiceInitializer extends AppInitializer {
     injector: Injector
   ): Promise<App> {
     const frontEndService = this.injector.get(MicroFrontendsService);
-    frontEndService.addProviders(loadedApp[app.initialize.providers ?? []]);
+    frontEndService.addProviders(loadedApp[app.handle.providers ?? []]);
     return Promise.resolve({});
   }
 }

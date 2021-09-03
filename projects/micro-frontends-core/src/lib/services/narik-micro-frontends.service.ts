@@ -4,7 +4,7 @@ import {
   App,
   AppDiscoverer,
   AppInformation,
-  AppInitializer,
+  AppHandler,
   AppLoader,
   AppMetadata,
   AppMetadataLoader,
@@ -31,7 +31,7 @@ export class NarikMicroFrontendsService extends MicroFrontendsService {
     private appDiscoverer: AppDiscoverer,
     private appMetadataLoader: AppMetadataLoader,
     private appLoader: AppLoader,
-    @Inject(AppInitializer) private appInitializers: AppInitializer[]
+    @Inject(AppHandler) private appInitializers: AppHandler[]
   ) {
     super();
   }
