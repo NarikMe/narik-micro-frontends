@@ -2,12 +2,11 @@ import { Compiler, Injectable, Injector } from '@angular/core';
 import {
   App,
   AppInformation,
-  AppHandler,
-  AppMetadata,
+  AppHandler
 } from '@narik/micro-frontends-infrastructure';
 
 @Injectable()
-export class AngularComponentInitializer extends AppHandler {
+export class AngularComponentHandler extends AppHandler {
   constructor(private compiler: Compiler) {
     super();
   }

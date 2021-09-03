@@ -6,7 +6,7 @@ import {
 } from '@narik/micro-frontends-infrastructure';
 
 @Injectable()
-export class AngularAppInitializer extends AppHandler {
+export class AngularAppHandler extends AppHandler {
   constructor(private compiler: Compiler, private injector: Injector) {
     super();
   }

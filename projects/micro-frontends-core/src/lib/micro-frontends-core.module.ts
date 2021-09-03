@@ -1,4 +1,4 @@
-import { CustomElementInitializer } from './services/handlers/custom-element-handler.service';
+import { CustomElementHandler } from './services/handlers/custom-element-handler.service';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import {
   AppDiscoverer,
@@ -12,10 +12,10 @@ import { JsonAppDiscoverer } from './services/json-app-discoverer.service';
 import { NarikMicroFrontendsService } from './services/narik-micro-frontends.service';
 import { NarikAppLoader } from './services/narik-app-loader.service';
 import { AppHandler } from '@narik/micro-frontends-infrastructure';
-import { AngularAppInitializer } from './services/handlers/angular-app-handler.service';
-import { AngularComponentInitializer } from './services/handlers/angular-component-handler.service';
-import { AngularRoutingAppInitializer } from './services/handlers/angular-routing-app-handler.service';
-import { AngularServiceInitializer } from './services/handlers/angular-service-handler.service';
+import { AngularAppHandler } from './services/handlers/angular-app-handler.service';
+import { AngularComponentHandler } from './services/handlers/angular-component-handler.service';
+import { AngularRoutingAppHandler } from './services/handlers/angular-routing-app-handler.service';
+import { AngularServiceHandler } from './services/handlers/angular-service-handler.service';
 
 @NgModule({})
 export class MicroFrontendsCoreModule {
@@ -44,27 +44,27 @@ export class MicroFrontendsCoreModule {
         },
         {
           provide: AppHandler,
-          useClass: AngularComponentInitializer,
+          useClass: AngularComponentHandler,
           multi: true,
         },
         {
           provide: AppHandler,
-          useClass: AngularAppInitializer,
+          useClass: AngularAppHandler,
           multi: true,
         },
         {
           provide: AppHandler,
-          useClass: AngularRoutingAppInitializer,
+          useClass: AngularRoutingAppHandler,
           multi: true,
         },
         {
           provide: AppHandler,
-          useClass: AngularServiceInitializer,
+          useClass: AngularServiceHandler,
           multi: true,
         },
         {
           provide: AppHandler,
-          useClass: CustomElementInitializer,
+          useClass: CustomElementHandler,
           multi: true,
         },
       ],

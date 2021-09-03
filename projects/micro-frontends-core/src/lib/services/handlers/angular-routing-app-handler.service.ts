@@ -1,15 +1,14 @@
-import { Compiler, Injectable, Injector } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   App,
   AppInformation,
   AppHandler,
   AppLoader,
-  AppMetadata,
 } from '@narik/micro-frontends-infrastructure';
 
 @Injectable()
-export class AngularRoutingAppInitializer extends AppHandler {
+export class AngularRoutingAppHandler extends AppHandler {
   constructor(private router: Router, private appLoader: AppLoader) {
     super();
   }

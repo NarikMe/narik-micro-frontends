@@ -10,7 +10,7 @@ import {
 } from '@narik/micro-frontends-infrastructure';
 
 @Injectable()
-export class CustomElementInitializer extends AppHandler {
+export class CustomElementHandler extends AppHandler {
   constructor(private rendererFactory: RendererFactory2) {
     super();
   }
