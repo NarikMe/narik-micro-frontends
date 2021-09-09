@@ -15,6 +15,10 @@
       "@narik/micro-frontends-ui": [
         "dist/micro-frontends-ui/micro-frontends-ui",
         "dist/micro-frontends-ui"
+      ],
+      "micro-frontends-vue-handlers": [
+        "dist/micro-frontends-vue-handlers/micro-frontends-vue-handlers",
+        "dist/micro-frontends-vue-handlers"
       ]
     },
     "outDir": "./dist/out-tsc",
