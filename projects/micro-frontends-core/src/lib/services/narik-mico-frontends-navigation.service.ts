@@ -1,24 +1,25 @@
-import { Router } from '@angular/router';
+import { Inject } from '@angular/core';
 import {
+  AppHandler,
   MicroFrontendsService,
   NavigationOption,
   NavigationService,
+  interpolate,
 } from '@narik/micro-frontends-infrastructure';
 
 export class NarikMicroFrontendsNavigationService extends NavigationService {
-  /**
-   *
-   */
+  private templateMatcher: RegExp = /{{\s?([^{}\s]*)\s?}}/g;
+
   constructor(
     private microFrontendsService: MicroFrontendsService,
-    private router: Router
+    @Inject(AppHandler) private appHandlers: AppHandler[]
   ) {
     super();
   }
   navigate(
     key: string,
     options?: NavigationOption,
-    data?: { [key: string]: any }
+    params?: { [key: string]: any }
   ): Promise<any> {
     const matches: {
       appKey: string;
@@ -28,6 +29,9 @@ export class NarikMicroFrontendsNavigationService extends NavigationService {
       };
     }[] = [];
 
+    options = options ?? {
+      target: 'same',
+    };
     this.microFrontendsService.appsMetadata.forEach((value, key) => {
       matches.push(
         ...value.routes
@@ -46,22 +50,16 @@ export class NarikMicroFrontendsNavigationService extends NavigationService {
       Promise.reject(`There are more than one route with key ${key}:`);
     }
 
-    switch (options?.target) {
-      case 'same': {
-        const appInformation = this.microFrontendsService.apps.get(
-          matches[0].appKey
-        );
-
-        return this.router.navigateByUrl(
-          `${appInformation?.handle?.path ?? appInformation?.key}/${
-            matches[0].route.path
-          }`
-        );
-      }
-      default:
-        break;
+    const app = this.microFrontendsService.apps.get(matches[0].appKey)!;
+    const handler = this.appHandlers.find((x) => x.key === app?.handle.type);
+    if (!handler) {
+      throw new Error(`could not found any handler for ${app?.handle.type}`);
     }
-
-    return Promise.resolve();
+    return handler.navigate(
+      app,
+      interpolate(matches[0].route.path, this.templateMatcher, params),
+      options,
+      params
+    );
   }
 }

@@ -1,3 +1,4 @@
+import { NavigationOption } from './../model/navigation-option';
 import { Injector } from '@angular/core';
 import { App } from '../interface/app';
 import { AppInformation } from '../model/app-information';
@@ -19,5 +20,15 @@ export abstract class AppHandler {
     injector: Injector
   ): Promise<App> {
     return Promise.resolve(loadedApp);
+  }
+  navigate(
+    app: Readonly<AppInformation>,
+    route: string,
+    option: NavigationOption,
+    params?: { [key: string]: any }
+  ): Promise<any> {
+    return Promise.reject(
+      `navigation is not supported by this type:${this.key}`
+    );
   }
 }

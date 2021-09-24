@@ -39,6 +39,47 @@ function prepareForRegx(str: string) {
   }
   return str;
 }
+
+export function interpolate(
+  expr: string,
+  templateMatcher: RegExp,
+  params?: { [key: string]: any }
+): string {
+  if (!params) {
+    return expr;
+  }
+  return expr.replace(templateMatcher, (substring: string, b: string) => {
+    let r = getValue(params, b);
+    return isDefined(r) ? r : substring;
+  });
+}
+
+export function getValue(target: any, key: string): any {
+  let keys = typeof key === 'string' ? key.split('.') : [key];
+  key = '';
+  do {
+    key += keys.shift();
+    if (
+      isDefined(target) &&
+      isDefined(target[key]) &&
+      (typeof target[key] === 'object' || !keys.length)
+    ) {
+      target = target[key];
+      key = '';
+    } else if (!keys.length) {
+      target = undefined;
+    } else {
+      key += '.';
+    }
+  } while (keys.length);
+
+  return target;
+}
+
 export function isString(obj: any): obj is string {
   return typeof obj === 'string';
+}
+
+export function isDefined(value: any): boolean {
+  return typeof value !== 'undefined' && value !== null;
 }
