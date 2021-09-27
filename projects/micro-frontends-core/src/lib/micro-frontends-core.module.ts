@@ -1,3 +1,4 @@
+import { NarikMicroFrontendsNavigationService } from './services/narik-mico-frontends-navigation.service';
 import { CustomElementHandler } from './services/handlers/custom-element-handler.service';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import {
@@ -5,6 +6,7 @@ import {
   AppLoader,
   AppMetadataLoader,
   MicroFrontendsService,
+  NavigationService,
 } from '@narik/micro-frontends-infrastructure';
 import { CoreOptions } from './model/options';
 import { JsonMetadataLoader } from './services/json-metadata-loader.service';
@@ -41,6 +43,10 @@ export class MicroFrontendsCoreModule {
         {
           provide: AppLoader,
           useClass: options?.appLoader || NarikAppLoader,
+        },
+        {
+          provide: NavigationService,
+          useClass: options?.navigationService || NarikMicroFrontendsNavigationService,
         },
         {
           provide: AppHandler,
