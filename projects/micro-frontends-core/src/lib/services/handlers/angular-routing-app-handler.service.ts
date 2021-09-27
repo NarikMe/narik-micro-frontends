@@ -45,16 +45,16 @@ export class AngularRoutingAppHandler extends AppHandler {
       [key: string]: any;
     }
   ): Promise<any> {
+    const completeRoutePath = `${app?.handle?.path ?? app?.key}${
+      !!route ? '/' + route : ''
+    }`;
     if (options.target === 'same') {
-      return this.router.navigateByUrl(
-        `${app?.handle?.path ?? app?.key}/${route}`,
-        {
-          state: params,
-        }
-      );
+      return this.router.navigateByUrl(completeRoutePath, {
+        state: params,
+      });
     } else if (options.target === 'new-tab') {
       const url = this.router.serializeUrl(
-        this.router.createUrlTree([`${app?.handle?.path ?? app?.key}/${route}`])
+        this.router.createUrlTree([completeRoutePath])
       );
       window.open(url, '_blank');
       return Promise.resolve(true);

@@ -1,4 +1,4 @@
-import { Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import {
   AppHandler,
   MicroFrontendsService,
@@ -7,6 +7,7 @@ import {
   interpolate,
 } from '@narik/micro-frontends-infrastructure';
 
+@Injectable()
 export class NarikMicroFrontendsNavigationService extends NavigationService {
   private templateMatcher: RegExp = /{{\s?([^{}\s]*)\s?}}/g;
 
@@ -17,7 +18,7 @@ export class NarikMicroFrontendsNavigationService extends NavigationService {
     super();
   }
   navigate(
-    key: string,
+    navigationKey: string,
     options?: NavigationOption,
     params?: { [key: string]: any }
   ): Promise<any> {
@@ -34,20 +35,22 @@ export class NarikMicroFrontendsNavigationService extends NavigationService {
     };
     this.microFrontendsService.appsMetadata.forEach((value, key) => {
       matches.push(
-        ...value.routes
-          ?.filter((r) => r.key === key)
+        ...(value.routes
+          ?.filter((r) => r.key === navigationKey)
           .map((r) => ({
             appKey: key,
             route: r,
-          }))
+          })) ?? [])
       );
     });
 
     if (matches.length === 0) {
-      Promise.reject(`Could not find any route with key ${key}`);
+      return Promise.reject(`Could not find any route with key ${navigationKey}`);
     }
     if (matches.length > 1) {
-      Promise.reject(`There are more than one route with key ${key}:`);
+      return Promise.reject(
+        `There are more than one route with key ${navigationKey}:`
+      );
     }
 
     const app = this.microFrontendsService.apps.get(matches[0].appKey)!;
