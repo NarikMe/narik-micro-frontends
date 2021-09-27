@@ -159,9 +159,9 @@ export class NarikMicroFrontendsService extends MicroFrontendsService {
     const appKeys: { key: string; app: string; title?: string }[] = [];
     this.appsMetadata.forEach((value) => {
       appKeys.push(
-        ...value['extension-points']
-          .filter((ex) => ex.key === extensionPointKey)
-          .flat()
+        ...(value['extension-points']
+          ?.filter((ex) => ex.key === extensionPointKey)
+          ?.flat() || [])
       );
     });
     return appKeys;
