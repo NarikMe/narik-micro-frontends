@@ -4,6 +4,7 @@ import {
   AppLoader,
   AppMetadataLoader,
   MicroFrontendsService,
+  NavigationService,
 } from '@narik/micro-frontends-infrastructure';
 
 export interface CoreOptions {
@@ -11,4 +12,5 @@ export interface CoreOptions {
   appMetadataLoader?: Type<AppMetadataLoader>;
   microFrontendsService?: Type<MicroFrontendsService>;
   appLoader?: Type<AppLoader>;
+  navigationService?: Type<NavigationService>;
 }
