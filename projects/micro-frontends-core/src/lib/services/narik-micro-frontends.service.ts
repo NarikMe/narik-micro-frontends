@@ -17,8 +17,8 @@ export class NarikMicroFrontendsService extends MicroFrontendsService {
   private _injector?: Injector;
   private providers: Provider[] = [];
   private initialized = false;
-  private apps: Map<string, AppInformation> = new Map<string, AppInformation>();
-  private appsMetadata: Map<string, AppMetadata> = new Map<
+  public apps: Map<string, AppInformation> = new Map<string, AppInformation>();
+  public appsMetadata: Map<string, AppMetadata> = new Map<
     string,
     AppMetadata
   >();
@@ -159,9 +159,9 @@ export class NarikMicroFrontendsService extends MicroFrontendsService {
     const appKeys: { key: string; app: string; title?: string }[] = [];
     this.appsMetadata.forEach((value) => {
       appKeys.push(
-        ...value['extension-points']
-          .filter((ex) => ex.key === extensionPointKey)
-          .flat()
+        ...(value['extension-points']
+          ?.filter((ex) => ex.key === extensionPointKey)
+          ?.flat() || [])
       );
     });
     return appKeys;

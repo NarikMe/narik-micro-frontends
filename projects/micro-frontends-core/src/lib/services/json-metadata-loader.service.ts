@@ -29,6 +29,7 @@ export class JsonMetadataLoader extends AppMetadataLoader {
     }
     return Promise.resolve({
       'extension-points': [],
+      routes: [],
       apps: [],
     });
   }
