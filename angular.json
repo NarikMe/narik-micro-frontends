@@ -98,37 +98,6 @@
           }
         }
       }
-    },
-    "micro-frontends-vue-handlers": {
-      "projectType": "library",
-      "root": "projects/micro-frontends-vue-handlers",
-      "sourceRoot": "projects/micro-frontends-vue-handlers/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "project": "projects/micro-frontends-vue-handlers/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/micro-frontends-vue-handlers/tsconfig.lib.prod.json"
-            },
-            "development": {
-              "tsConfig": "projects/micro-frontends-vue-handlers/tsconfig.lib.json"
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/micro-frontends-vue-handlers/src/test.ts",
-            "tsConfig": "projects/micro-frontends-vue-handlers/tsconfig.spec.json",
-            "karmaConfig": "projects/micro-frontends-vue-handlers/karma.conf.js"
-          }
-        }
-      }
     }
   }
 }
