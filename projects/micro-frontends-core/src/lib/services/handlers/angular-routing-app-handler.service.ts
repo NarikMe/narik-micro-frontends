@@ -4,13 +4,13 @@ import {
   App,
   AppInformation,
   AppHandler,
-  AppLoader,
   NavigationOption,
+  MicroFrontendsService,
 } from '@narik/micro-frontends-infrastructure';
 
 @Injectable()
 export class AngularRoutingAppHandler extends AppHandler {
-  constructor(private router: Router, private appLoader: AppLoader) {
+  constructor(private router: Router, private injector: Injector) {
     super();
   }
   get key(): string {
@@ -29,7 +29,12 @@ export class AngularRoutingAppHandler extends AppHandler {
     this.router.config.push({
       path: app.handle.path ?? app.key,
       loadChildren: () => {
-        return this.appLoader.load(app).then((m) => m[app.handle.module]);
+        const microFrontendsService: MicroFrontendsService = this.injector.get(
+          MicroFrontendsService
+        );
+        return microFrontendsService
+          .loadApp(app)
+          .then((m) => m[app.handle.module]);
       },
     });
     return Promise.resolve({});

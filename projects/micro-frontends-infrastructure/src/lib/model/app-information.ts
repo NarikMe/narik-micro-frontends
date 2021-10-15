@@ -2,6 +2,7 @@ import { AppMetadata } from './app-metadata';
 
 export interface AppInformation<
   TLoad = {
+    type?: string;
     [key: string]: any;
   },
   THandle = {

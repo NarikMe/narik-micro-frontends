@@ -12,7 +12,7 @@ import { CoreOptions } from './model/options';
 import { JsonMetadataLoader } from './services/json-metadata-loader.service';
 import { JsonAppDiscoverer } from './services/json-app-discoverer.service';
 import { NarikMicroFrontendsService } from './services/narik-micro-frontends.service';
-import { NarikAppLoader } from './services/narik-app-loader.service';
+import { NarikModuleFederationAppLoader } from './services/narik-module-federation-loader.service';
 import { AppHandler } from '@narik/micro-frontends-infrastructure';
 import { AngularAppHandler } from './services/handlers/angular-app-handler.service';
 import { AngularComponentHandler } from './services/handlers/angular-component-handler.service';
@@ -42,11 +42,13 @@ export class MicroFrontendsCoreModule {
         },
         {
           provide: AppLoader,
-          useClass: options?.appLoader || NarikAppLoader,
+          useClass: NarikModuleFederationAppLoader,
+          multi: true,
         },
         {
           provide: NavigationService,
-          useClass: options?.navigationService || NarikMicroFrontendsNavigationService,
+          useClass:
+            options?.navigationService || NarikMicroFrontendsNavigationService,
         },
         {
           provide: AppHandler,

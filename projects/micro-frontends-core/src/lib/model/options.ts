@@ -1,7 +1,6 @@
 import { Type } from '@angular/core';
 import {
   AppDiscoverer,
-  AppLoader,
   AppMetadataLoader,
   MicroFrontendsService,
   NavigationService,
@@ -11,6 +10,5 @@ export interface CoreOptions {
   appDiscoverer?: Type<AppDiscoverer>;
   appMetadataLoader?: Type<AppMetadataLoader>;
   microFrontendsService?: Type<MicroFrontendsService>;
-  appLoader?: Type<AppLoader>;
   navigationService?: Type<NavigationService>;
 }

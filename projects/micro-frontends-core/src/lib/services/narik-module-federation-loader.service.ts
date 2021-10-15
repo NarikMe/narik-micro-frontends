@@ -9,7 +9,8 @@ import {
 } from '@narik/micro-frontends-infrastructure';
 
 @Injectable()
-export class NarikAppLoader extends AppLoader {
+export class NarikModuleFederationAppLoader extends AppLoader {
+  readonly key = 'module-federation';
   constructor() {
     super();
   }
