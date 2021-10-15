@@ -30,7 +30,7 @@ export class NarikMicroFrontendsService extends MicroFrontendsService {
     private defaultInjector: Injector,
     private appDiscoverer: AppDiscoverer,
     private appMetadataLoader: AppMetadataLoader,
-    private appLoader: AppLoader,
+    @Inject(AppLoader) private appLoaders: AppLoader[],
     @Inject(AppHandler) private appHandlers: AppHandler[]
   ) {
     super();
@@ -49,7 +49,7 @@ export class NarikMicroFrontendsService extends MicroFrontendsService {
     if (!defaultApp) {
       throw new Error('there is no default in apps');
     }
-    await this.appLoader.load(defaultApp).then((loadedApp: any) => {
+    await this.loadApp(defaultApp).then((loadedApp: any) => {
       return this.activateApp(defaultApp, loadedApp, {
         rootElement,
       });
@@ -64,7 +64,7 @@ export class NarikMicroFrontendsService extends MicroFrontendsService {
           return Promise.all(
             this.apps.valuesArray().map((app) => {
               if (app.eagerLoad) {
-                return this.appLoader.load(app).then((loadedApp) => {
+                return this.loadApp(app).then((loadedApp) => {
                   return this.initApp(app, loadedApp) as Promise<unknown>;
                 });
               } else {
@@ -142,7 +142,7 @@ export class NarikMicroFrontendsService extends MicroFrontendsService {
     if (!app) {
       throw new Error(`could not find any app with key:${appKey}`);
     }
-    return this.appLoader.load(app).then((loadedApp: any) => {
+    return this.loadApp(app).then((loadedApp: any) => {
       return this.activateApp(app, loadedApp);
     });
   }
@@ -172,5 +172,15 @@ export class NarikMicroFrontendsService extends MicroFrontendsService {
       throw new Error('could not add providers after initialized');
     }
     this.providers.push(...providers);
+  }
+
+  async loadApp(app: AppInformation): Promise<any> {
+    const appLoader = this.appLoaders.find(
+      (loader) => loader.key === (app.load.type ?? 'module-federation')
+    );
+    if (appLoader) {
+      return await appLoader.load(app);
+    } else
+      throw new Error(`Could not find any loader with the key: '${app.load.key}' `);
   }
 }

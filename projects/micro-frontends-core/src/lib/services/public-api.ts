@@ -1,6 +1,6 @@
 export * from './json-app-discoverer.service';
 export * from './json-metadata-loader.service';
-export * from './narik-app-loader.service';
+export * from './narik-module-federation-loader.service';
 export * from './narik-micro-frontends.service';
 
 

@@ -5,7 +5,6 @@ import {
   AppInformation,
   AppMetadata,
   AppMetadataLoader,
-  isString,
 } from '@narik/micro-frontends-infrastructure';
 import { firstValueFrom } from 'rxjs';
 

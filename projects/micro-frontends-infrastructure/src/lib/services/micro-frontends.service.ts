@@ -17,4 +17,5 @@ export abstract class MicroFrontendsService {
     extensionPointKey: string
   ): { key: string; app: string; title?: string }[];
   abstract addProviders(providers: Provider[]): void;
+  abstract loadApp(app: AppInformation): Promise<any>;
 }
