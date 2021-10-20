@@ -5,6 +5,7 @@ import {
   NavigationOption,
   NavigationService,
   interpolate,
+  AppInformation,
 } from '@narik/micro-frontends-infrastructure';
 
 @Injectable()
@@ -17,6 +18,13 @@ export class NarikMicroFrontendsNavigationService extends NavigationService {
   ) {
     super();
   }
+
+  protected getAppHandler(app: AppInformation): AppHandler | undefined {
+    return this.appHandlers
+      .sort((handler, handler1) => handler.order - handler1.order)
+      .find((x) => x.canHandle(app));
+  }
+
   navigate(
     navigationKey: string,
     options?: NavigationOption,
@@ -45,7 +53,9 @@ export class NarikMicroFrontendsNavigationService extends NavigationService {
     });
 
     if (matches.length === 0) {
-      return Promise.reject(`Could not find any route with key ${navigationKey}`);
+      return Promise.reject(
+        `Could not find any route with key ${navigationKey}`
+      );
     }
     if (matches.length > 1) {
       return Promise.reject(
@@ -54,7 +64,7 @@ export class NarikMicroFrontendsNavigationService extends NavigationService {
     }
 
     const app = this.microFrontendsService.apps.get(matches[0].appKey)!;
-    const handler = this.appHandlers.find((x) => x.key === app?.handle.type);
+    const handler = this.getAppHandler(app);
     if (!handler) {
       throw new Error(`could not found any handler for ${app?.handle.type}`);
     }
