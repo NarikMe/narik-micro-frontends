@@ -1,6 +1,7 @@
 import { AppInformation } from '../model/app-information';
 
 export abstract class AppLoader {
-  abstract get key(): string;
+  abstract get order(): number;
+  abstract canLoad(app: AppInformation): boolean;
   abstract load(app: AppInformation): Promise<any>;
 }

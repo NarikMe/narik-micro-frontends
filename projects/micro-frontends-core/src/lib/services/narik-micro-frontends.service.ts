@@ -175,12 +175,14 @@ export class NarikMicroFrontendsService extends MicroFrontendsService {
   }
 
   async loadApp(app: AppInformation): Promise<any> {
-    const appLoader = this.appLoaders.find(
-      (loader) => loader.key === (app.load.type ?? 'module-federation')
-    );
+    const appLoader = this.appLoaders
+      .sort((loader, loader2) => loader.order - loader2.order)
+      .find((loader) => loader.canLoad(app));
     if (appLoader) {
       return await appLoader.load(app);
     } else
-      throw new Error(`Could not find any loader with the key: '${app.load.key}' `);
+      throw new Error(
+        `Could not find any loader with for app key: '${app.key}' `
+      );
   }
 }

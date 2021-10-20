@@ -6,14 +6,23 @@ import { Injectable } from '@angular/core';
 import {
   AppInformation,
   AppLoader,
+  AppMetadata,
 } from '@narik/micro-frontends-infrastructure';
 
 @Injectable()
 export class NarikModuleFederationAppLoader extends AppLoader {
-  readonly key = 'module-federation';
+  private readonly loaderKey = 'module-federation';
+  readonly order = 0;
   constructor() {
     super();
   }
+
+  canLoad(
+    app: AppInformation<{ [key: string]: any; type?: string }, any, any>
+  ): boolean {
+    return !app.load.type || app.load.type === this.loaderKey;
+  }
+
   load(
     app: AppInformation<{
       remote: {
