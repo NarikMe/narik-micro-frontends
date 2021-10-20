@@ -1,21 +1,20 @@
 import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import {
-  App,
-  AppInformation,
-  AppHandler,
-  NavigationOption,
-  MicroFrontendsService,
+  App, AppHandler, AppInformation, MicroFrontendsService, NavigationOption
 } from '@narik/micro-frontends-infrastructure';
 
 @Injectable()
 export class AngularRoutingAppHandler extends AppHandler {
+  private readonly handlerKey = 'angular-routing-app';
+  readonly order = 0;
   constructor(private router: Router, private injector: Injector) {
     super();
   }
-  get key(): string {
-    return 'angular-routing-app';
+  canHandle(app: AppInformation): boolean {
+    return app.handle.type === this.handlerKey;
   }
+
   initialize(
     app: AppInformation<
       any,

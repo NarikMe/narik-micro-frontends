@@ -88,18 +88,24 @@ export class NarikMicroFrontendsService extends MicroFrontendsService {
     loadedApp?: any,
     parameters?: { [key: string]: any }
   ): Promise<App> {
-    const handler = this.appHandlers.find((x) => x.key === app.handle.type);
+    const handler = this.getAppHandler(app);
     if (!handler) {
       throw new Error(`could not found any handler for ${app.handle.type}`);
     }
     return handler.initialize(app, loadedApp, parameters || {}, this.injector);
+  }
+
+  protected getAppHandler(app: AppInformation): AppHandler | undefined {
+    return this.appHandlers
+      .sort((handler, handler1) => handler.order - handler1.order)
+      .find((x) => x.canHandle(app));
   }
   protected activateApp(
     app: AppInformation,
     loadedApp?: any,
     parameters?: { [key: string]: any }
   ): Promise<App> {
-    const handler = this.appHandlers.find((x) => x.key === app.handle.type);
+    const handler = this.getAppHandler(app);
     if (!handler) {
       throw new Error(`could not found any handler for ${app.handle.type}`);
     }

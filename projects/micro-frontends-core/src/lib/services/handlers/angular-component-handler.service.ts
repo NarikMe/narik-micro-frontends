@@ -1,17 +1,18 @@
 import { Compiler, Injectable, Injector } from '@angular/core';
 import {
-  App,
-  AppInformation,
-  AppHandler
+  App, AppHandler, AppInformation
 } from '@narik/micro-frontends-infrastructure';
 
 @Injectable()
 export class AngularComponentHandler extends AppHandler {
+  private readonly handlerKey = 'angular-component';
+  readonly order = 0;
   constructor(private compiler: Compiler) {
     super();
   }
-  get key(): string {
-    return 'angular-component';
+
+  canHandle(app: AppInformation): boolean {
+    return app.handle.type === this.handlerKey;
   }
   activate(
     app: AppInformation<

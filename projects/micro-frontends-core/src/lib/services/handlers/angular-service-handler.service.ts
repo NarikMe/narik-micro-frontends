@@ -1,18 +1,18 @@
 import { Injectable, Injector } from '@angular/core';
 import {
-  App,
-  AppInformation,
-  AppHandler,
-  MicroFrontendsService,
+  App, AppHandler, AppInformation, MicroFrontendsService
 } from '@narik/micro-frontends-infrastructure';
 
 @Injectable()
 export class AngularServiceHandler extends AppHandler {
+  private readonly handlerKey = 'angular-service';
+  readonly order = 0;
   constructor(private injector: Injector) {
     super();
   }
-  get key(): string {
-    return 'angular-service';
+
+  canHandle(app: AppInformation): boolean {
+    return app.handle.type === this.handlerKey;
   }
   initialize(
     app: AppInformation<any, { type: string; providers: string }, any>,

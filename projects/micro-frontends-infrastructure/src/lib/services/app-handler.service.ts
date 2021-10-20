@@ -4,7 +4,8 @@ import { App } from '../interface/app';
 import { AppInformation } from '../model/app-information';
 
 export abstract class AppHandler {
-  abstract get key(): string;
+  abstract get order(): number;
+  abstract canHandle(app: AppInformation): boolean;
   initialize(
     app: AppInformation,
     loadedApp: any,
@@ -28,7 +29,7 @@ export abstract class AppHandler {
     params?: { [key: string]: any }
   ): Promise<any> {
     return Promise.reject(
-      `navigation is not supported by this type:${this.key}`
+      `navigation is not supported for this type:${app.handle}`
     );
   }
 }
