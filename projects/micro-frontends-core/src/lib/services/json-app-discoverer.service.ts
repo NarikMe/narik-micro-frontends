@@ -11,7 +11,7 @@ export class JsonAppDiscoverer extends AppDiscoverer {
   constructor(private http: HttpClient) {
     super();
   }
-  DiscoverApps(): Promise<AppInformation[]> {
+  discoverApps(): Promise<AppInformation[]> {
     return firstValueFrom(
       this.http.get<AppInformation[]>(`assets/apps.json`)
     );

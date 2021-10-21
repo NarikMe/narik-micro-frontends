@@ -58,7 +58,7 @@ export class NarikMicroFrontendsService extends MicroFrontendsService {
   async initialize(): Promise<void> {
     this.initializing.next(true);
 
-    await this.appDiscoverer.DiscoverApps().then((apps: AppInformation[]) => {
+    await this.appDiscoverer.discoverApps().then((apps: AppInformation[]) => {
       return this.populateApps(apps.filter((a) => a.active ?? true)).then(
         () => {
           return Promise.all(
