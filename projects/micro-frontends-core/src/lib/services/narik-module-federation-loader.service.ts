@@ -29,6 +29,7 @@ export class NarikModuleFederationAppLoader extends AppLoader {
         key: string;
         entry: string;
         exposedModule: string;
+        type?: 'script' | 'script';
         development?: {
           active: boolean;
           entry: string;
@@ -36,16 +37,29 @@ export class NarikModuleFederationAppLoader extends AppLoader {
       };
     }>
   ): Promise<any> {
-    return loadRemoteEntry(
-      app.load.remote.development?.active
-        ? app.load.remote.development.entry
-        : app.load.remote.entry,
-      app.load.remote.key || app.key
-    ).then((entry) => {
-      return loadRemoteModule({
-        remoteName: app.load.remote.key || app.key,
-        exposedModule: app.load.remote.exposedModule,
+    const remoteEntry = app.load.remote.development?.active
+      ? app.load.remote.development.entry
+      : app.load.remote.entry;
+
+    if (app.load.remote.type !== 'script') {
+      return loadRemoteEntry({
+        type: 'module',
+        remoteEntry: remoteEntry,
+      }).then((entry) => {
+        return loadRemoteModule({
+          type: 'module',
+          remoteEntry: remoteEntry,
+          exposedModule: app.load.remote.exposedModule,
+        });
       });
-    });
+    }
+    return loadRemoteEntry(remoteEntry, app.load.remote.key || app.key).then(
+      (entry) => {
+        return loadRemoteModule({
+          remoteName: app.load.remote.key || app.key,
+          exposedModule: app.load.remote.exposedModule,
+        });
+      }
+    );
   }
 }
