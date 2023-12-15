@@ -16,15 +16,24 @@ export class JsonMetadataLoader extends AppMetadataLoader {
 
   loadMetadata(app: AppInformation): Promise<AppMetadata> {
     if (app.metadata) {
-      return 'path' in app.metadata || 'development' in app.metadata
-        ? firstValueFrom(
-            this.http.get<AppMetadata>(
-              app.metadata.development?.active
-                ? app.metadata.development.path
-                : app.metadata.path
-            )
+      if ('path' in app.metadata || 'development' in app.metadata) {
+        const metadata = app.metadata as {
+          path: string;
+          development?: {
+            path: string;
+            active: boolean;
+          };
+        };
+        firstValueFrom(
+          this.http.get<AppMetadata>(
+            metadata.development?.active
+              ? metadata.development.path
+              : metadata.path
           )
-        : Promise.resolve(app.metadata);
+        );
+      } else {
+        Promise.resolve(app.metadata);
+      }
     }
     return Promise.resolve({
       'extension-points': [],
